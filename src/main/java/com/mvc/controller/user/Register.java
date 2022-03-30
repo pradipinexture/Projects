@@ -1,32 +1,19 @@
 package com.mvc.controller.user;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
+
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import com.mvc.dao.UserDao;
 import com.mvc.model.UserModel;
-import com.mvc.service.RegisterService;
-import com.mvc.util.ConnectionClass;
 import com.mvc.util.EncryDecryAES;
-import com.mysql.cj.jdbc.Blob;
 import com.mvc.model.AddressModel;
 /**
  * Servlet implementation class Register
@@ -77,6 +64,12 @@ public class Register extends HttpServlet {
 					addModel.setPincode(pincode[i]);
 					addArrList.add(addModel);
 				}
+				if(!UserDao.insertData(userObj)) {
+					UserDao.insertAddress(addArrList,userObj.getEmail());
+					response.sendRedirect("index.jsp");
+					
+					
+				}
 				/*
 				if(RegisterService.validateFields(userObj)) {
 					response.sendRedirect("Login");
@@ -84,9 +77,8 @@ public class Register extends HttpServlet {
 				else {
 					out.print("Not Done");
 				}*/
-				UserDao.insertData(userObj); // insert all data into user table
-				UserDao.insertAddress(addArrList,userObj.getEmail()); // insert  all addresses
-				response.sendRedirect("index.jsp");
+				 // insert all data into user table
+				
 	}
 
 	/**

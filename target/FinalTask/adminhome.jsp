@@ -30,6 +30,10 @@
 <body>	
 	
 	<jsp:include page="header.jsp"/>
+	<%
+		List<UserModel> addModelObj= UserDao.getAllUsers();
+		if(addModelObj != null){
+	%>
 	<section class="form-section2">
 		<table class="table">
 		  <thead class="thead-light">
@@ -44,17 +48,18 @@
 		  </thead>
 		  <tbody>
 		  	<%
-				List<UserModel> addModelObj= UserDao.getAllUsers();
 				for(int i=0;i<addModelObj.size();i++){
 			%>
-		    <tr>
+		    <tr class="row">
 		      <th scope="row"><%=i+1 %></th>
 		      <td><a href="#"><%=addModelObj.get(i).getName() %></a></td>
 		      <td><%=addModelObj.get(i).getEmail() %></td>
 		      <td><button type="button" class="btn btn-success">Edit</button></td>
 		      <td><a id='<%=addModelObj.get(i).getEmail() %>' class="btn btn-danger" >Delete</a></td>
 		    </tr>
-		    <%}%>
+		    <%}
+		}
+		    %>
 		  </tbody>
 		</table>
 	</section>
@@ -64,21 +69,19 @@
 	$(document).ready(function() {
 		// crating new click event for save button
 		$(".btn").click(function() {
-			alert($('.btn').id);
-				//var id = this.val;
-				
-			/*	$.ajax({
-				url: "delete-ajax.jsp",
+			var cuEmail=$(this).attr('id');
+				$.ajax({
+				url: "DelUser",
 				type: "post",
 				data: {
-					  id : id,
-				      },
-				success : function(data){
-				   alert(data); // alerts the response from jsp
-				   location.reload(); 
-		        }
+					cuEmail : cuEmail,
+				},
+				success : function(data){}
 				});
-		});*/
+				$(this).parents(".row").animate("fast").animate({
+			        opacity: "hide"
+			    }, "slow");
+		});
 	});
 </script>
 	

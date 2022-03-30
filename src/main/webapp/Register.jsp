@@ -186,13 +186,13 @@
 	<script type="text/javascript">
 		$("#email").blur(function() {
 			var cuEmail=$(this).val();
-			//alert(cuEmail);
 				
 				$.ajax({
-				url: "test.jsp",
+				url: "DelUser",
 				type: "post",
 				data: {
 					cuEmail : cuEmail,
+					isCheck : "email",
 				      },
 				success : function(data){
 					if(data != null){

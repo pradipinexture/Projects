@@ -184,6 +184,24 @@
 	<script type="text/javascript" src="assets/javascript/jquery-3.6.0.min.js"></script>
 	<!-- 2. Custom file <script type="text/javascript" src="assets/javascript/custom.js"></script>-->
 	<script type="text/javascript">
+		$("#email").blur(function() {
+			var cuEmail=$(this).val();
+				
+				$.ajax({
+				url: "DelUser",
+				type: "post",
+				data: {
+					cuEmail : cuEmail,
+					isCheck : "email",
+				      },
+				success : function(data){
+					if(data != null){
+						$("#email-error").text(data);
+					}
+				}
+				});
+		});
+	
 		var x = 1; 
 		$('.list_add_button').click(function() {
 			    if(x++ < 5){ 

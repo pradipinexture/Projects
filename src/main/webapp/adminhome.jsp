@@ -30,6 +30,11 @@
 <body>	
 	
 	<jsp:include page="header.jsp"/>
+	<%
+		List<UserModel> addModelObj= UserDao.getAllUsers();
+		if(!addModelObj.isEmpty()){
+	
+	%>
 	<section class="form-section2">
 		<table class="table">
 		  <thead class="thead-light">
@@ -44,7 +49,6 @@
 		  </thead>
 		  <tbody>
 		  	<%
-				List<UserModel> addModelObj= UserDao.getAllUsers();
 				for(int i=0;i<addModelObj.size();i++){
 			%>
 		    <tr class="row">
@@ -52,11 +56,11 @@
 		      <td><a href="#"><%=addModelObj.get(i).getName() %></a></td>
 		      <td><%=addModelObj.get(i).getEmail() %></td>
 		      <td><button type="button" class="btn btn-success">Edit</button></td>
-		      <td><a id='<%=addModelObj.get(i).getEmail() %>' class="btn btn-danger" value="fff">Delete</a></td>
+		      <td><a id='<%=addModelObj.get(i).getEmail() %>' class="btn btn-danger" >Delete</a></td>
 		    </tr>
-		    <%}%>
+		    <%}}else{out.print("!! Sorry Users are not avilable.");}%>
 		  </tbody>
-		</table>
+			</table>
 	</section>
 	<jsp:include page="footer.jsp"/>
 	
@@ -65,18 +69,17 @@
 		// crating new click event for save button
 		$(".btn").click(function() {
 			var cuEmail=$(this).attr('id');
-				
 				$.ajax({
 				url: "DelUser",
 				type: "post",
 				data: {
 					cuEmail : cuEmail,
-				      },
+				},
 				success : function(data){}
 				});
 				$(this).parents(".row").animate("fast").animate({
 			        opacity: "hide"
-			      }, "slow");
+			    }, "slow");
 		});
 	});
 </script>

@@ -1,4 +1,5 @@
 com\mvc\controller\user\Login.class
+com\mvc\service\Ajax.class
 com\mvc\controller\user\Register.class
 com\mvc\controller\DelUser.class
 com\mvc\util\EncryDecryAES.class
@@ -6,6 +7,7 @@ com\mvc\service\RegisterService.class
 com\mvc\util\Validation.class
 com\mvc\dao\UserDao.class
 com\mvc\model\UserModel.class
+com\mvc\controller\user\CheckUser.class
 com\mvc\controller\Logout.class
 com\mvc\model\Role.class
 com\mvc\model\AddressModel.class

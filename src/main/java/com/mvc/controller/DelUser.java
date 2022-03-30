@@ -34,12 +34,33 @@ public class DelUser extends HttpServlet {
 		response.setContentType("text/html");  
 		PrintWriter out = response.getWriter(); // for printing	
 		//
-		if(UserDao.deleteUser(request.getParameter("cuEmail"))) {
-			out.print("deleted successfully");
+		if((request.getParameter("isCheck")) != null){
+			if(UserDao.checkUserAvailability(request.getParameter("cuEmail"))){
+				out.print("!! Email already exist");
+			}
 		}
 		else {
-			out.print(" Not deleted successfully");
+			if(UserDao.deleteUser(request.getParameter("cuEmail"))) {
+				out.print("deleted successfully");
+			}
+			else {
+				out.print(" Not deleted successfully");
+			}
 		}
+		/*if(request.getParameter("isCheck") == "delete") {
+			if(UserDao.deleteUser(request.getParameter("cuEmail"))) {
+				out.print("deleted successfully");
+			}
+			else {
+				out.print(" Not deleted successfully");
+			}
+		}
+		else if(){
+			if(UserDao.checkUserAvailability(request.getParameter("cuEmail"))){
+				out.print("!! Email already exist");
+			}
+		}*/
+		
 		
 		
 	}

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+  	<servlet-name>Register</servlet-name>
+  	<display-name>Register</display-name>
+  	<servlet-class>com.mvc.controller.user.Register</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>Login</servlet-name>
+  	<display-name>Login</display-name>
+  	<servlet-class>com.mvc.controller.user.Login</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>Logout</servlet-name>
+  	<display-name>Logout</display-name>
+  	<servlet-class>com.mvc.controller.Logout</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>Forgot</servlet-name>
+  	<display-name>Forgot</display-name>
+  	<description></description>
+  	<servlet-class>com.mvc.controller.user.Forgot</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>DelUser</servlet-name>
+  	<display-name>DelUser</display-name>
+  	<description></description>
+  	<servlet-class>com.mvc.controller.DelUser</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+  	<servlet-name>Register</servlet-name>
+  	<url-pattern>/Register</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet-mapping>
+  	<servlet-name>Login</servlet-name>
+  	<url-pattern>/Login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>Logout</servlet-name>
+  	<url-pattern>/Logout</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>Forgot</servlet-name>
+  	<url-pattern>/Forgot</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>DelUser</servlet-name>
+  	<url-pattern>/DelUser</url-pattern>
+  </servlet-mapping>
+
+
+</web-app>

@@ -77,7 +77,7 @@
 						<!-- Below div for button  -->
 						
 					</section>
-					
+					<a href="export.jsp" >Export data</a>
 				</div>
 			</div>
 		</div>

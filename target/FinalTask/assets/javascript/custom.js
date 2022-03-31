@@ -11,7 +11,7 @@ $(document).ready(function(){
 				e.preventDefault(e);
 			}
         });
-            
+            	
     
         $('#hobby').blur(function(){
 			if(dropCheck($(this[this.selectedIndex]).val())){
@@ -79,12 +79,28 @@ $(document).ready(function(){
 		
 		/* Below function for email validation*/
 		$('#email').blur(function(){
-			if(!emailCheck($("#email").val())){
+			/*if(!emailCheck($("#email").val())){
 				$("#email-error").text("Please enter valid email");
 			}	
 			else{
 				$("#email-error").text("");
-			}
+			}*/
+			var cuEmail=$(this).val();
+				
+				$.ajax({
+				url: "DelUser",
+				type: "post",
+				data: {
+					cuEmail : cuEmail,
+					isCheck : "email",
+				      },
+				success : function(data){
+					if(data != null){
+						$("#email-error").text(data);
+					}
+				}
+				});
+		
 		});
 		
 		

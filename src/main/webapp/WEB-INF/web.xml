@@ -44,6 +44,12 @@
   	<description></description>
   	<servlet-class>com.mvc.service.Ajax</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>CSVPrint</servlet-name>
+  	<display-name>CSVPrint</display-name>
+  	<description></description>
+  	<servlet-class>com.mvc.controller.CSVPrint</servlet-class>
+  </servlet>
 
   <servlet-mapping>
   	<servlet-name>Register</servlet-name>
@@ -73,6 +79,10 @@
   <servlet-mapping>
   	<servlet-name>Ajax</servlet-name>
   	<url-pattern>/Ajax</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>CSVPrint</servlet-name>
+  	<url-pattern>/CSVPrint</url-pattern>
   </servlet-mapping>
 
 

@@ -184,7 +184,8 @@
 	<script type="text/javascript" src="assets/javascript/jquery-3.6.0.min.js"></script>
 	<!-- 2. Custom file <script type="text/javascript" src="assets/javascript/custom.js"></script>-->
 	<script type="text/javascript">
-		$("#email").blur(function() {
+		$('#email').blur(function(){
+			
 			var cuEmail=$(this).val();
 				
 				$.ajax({
@@ -200,6 +201,7 @@
 					}
 				}
 				});
+		
 		});
 	
 		var x = 1; 

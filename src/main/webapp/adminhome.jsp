@@ -17,6 +17,7 @@
 <!-- 1.Library -->
 <link href="assets/library/bootstrap/css/bootstrap.min.css"
 	type="text/css" rel="stylesheet" />
+			<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 <!-- 2.custom file -->
 <link href="assets/css/custom.css" type="text/css" rel="stylesheet" />
 <style type="text/css">
@@ -25,6 +26,7 @@
 		min-height: 510px;
 	}
 </style>
+
 <script type="text/javascript" src="assets/javascript/jquery-3.6.0.min.js"></script>
 </head>
 <body>	
@@ -42,6 +44,7 @@
 		      <th scope="col">#</th>
 		      <th scope="col">Name</th>
 		      <th scope="col">Email</th>
+		      <th scope="col">Gender</th>
 		      <th scope="col">Edit</th>
 		      <th scope="col">Delete</th>
 		      
@@ -55,17 +58,27 @@
 		      <th scope="row"><%=i+1 %></th>
 		      <td><a href="#"><%=addModelObj.get(i).getName() %></a></td>
 		      <td><%=addModelObj.get(i).getEmail() %></td>
+		      <td><%=addModelObj.get(i).getGender() %></td>
 		      <td><button type="button" class="btn btn-success">Edit</button></td>
 		      <td><a id='<%=addModelObj.get(i).getEmail() %>' class="btn btn-danger" >Delete</a></td>
 		    </tr>
 		    <%}}else{out.print("!! Sorry Users are not avilable.");}%>
+		    <tr class="row">
+		      <td><a class="btn btn-success" href="CSVPrint">Generate CSV File</a></td>
+		    </tr>
 		  </tbody>
 			</table>
+
 	</section>
 	<jsp:include page="footer.jsp"/>
-	
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
 	<script>
 	$(document).ready(function() {
+		
+		$(function() {
+			$("#table_id").dataTable();
+		});
 		// crating new click event for save button
 		$(".btn").click(function() {
 			var cuEmail=$(this).attr('id');

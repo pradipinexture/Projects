@@ -39,7 +39,7 @@ $(document).ready(function(){
 		});
 		$('#email').blur(function(){
 			if(!emailCheck($("#email").val())){
-					$("#email-error").text("Please enter valid email");
+					$("#email-error").text("Please enter val email");
 			}	
 			else{
 					$("#email-error").text("");	

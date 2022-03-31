@@ -44,7 +44,7 @@
 							<div class="form-group">
 								<label for="password">Password :</label> <input type="password" name="password"
 									class="form-control" id="password"
-									placeholder="Please enter Password" required>
+									placeholder="Please enter Password" disabled>
 								<p class="field-error" id="password-error"></p>
 							</div>
 
@@ -52,7 +52,7 @@
 							<div class="form-group">
 								<label for="c-password">Confirm Password :</label> <input
 									type="password" class="form-control" id="c-password" name="cpassword"
-									placeholder="Please enter confirm Password" required>
+									placeholder="Please enter confirm Password" disabled>
 								<p class="field-error" id="cpassword-error"></p>
 							</div>
 							<div class="form-button">
@@ -61,7 +61,7 @@
 						</form>
 						<!-- Below div for button  -->
 
-					</section>
+					</section>	
 				</div>
 			</div>
 		</div>
@@ -73,9 +73,34 @@
 	<!-- 1.Already created file -->
 	<script type="text/javascript" src="assets/javascript/jquery-3.6.0.min.js"></script>
 	<!-- 2. Custom file -->
-	<script type="text/javascript" src="assets/javascript/custom.js">
-	
-	
+	<script type="text/javascript" >
+		$('#email').blur(function(){
+			var cuEmail=$(this).val();
+				
+				$.ajax({
+				url: "DelUser",
+				type: "post",
+				data: {
+					cuEmail : cuEmail,
+					isCheck : "email",
+				      },
+					success : function(data){
+						if(data != null){
+							
+							if(data.length == 0){
+								$("input").removeAttr('disabled');
+								console.log(data.length);
+							}
+							else{
+								$("#email-error").text("!! Email not exist");
+							}
+						}
+					}
+			});
+				
+		});
+
+		
 	</script>
 	
 

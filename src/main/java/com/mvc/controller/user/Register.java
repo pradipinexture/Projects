@@ -64,11 +64,12 @@ public class Register extends HttpServlet {
 					addModel.setPincode(pincode[i]);
 					addArrList.add(addModel);
 				}
-				if(!UserDao.insertData(userObj)) {
+				if(UserDao.insertData(userObj)) {
 					UserDao.insertAddress(addArrList,userObj.getEmail());
-					response.sendRedirect("index.jsp");
-					
-					
+					response.sendRedirect("index.jsp");	
+				}
+				else {
+					response.sendRedirect("Register.jsp");	
 				}
 				/*
 				if(RegisterService.validateFields(userObj)) {

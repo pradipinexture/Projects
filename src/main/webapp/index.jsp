@@ -77,7 +77,6 @@
 						<!-- Below div for button  -->
 						
 					</section>
-					
 				</div>
 			</div>
 		</div>
@@ -89,7 +88,7 @@
 	<!-- 1.Already created file -->
 	<!-- 2. Custom file <script type="text/javascript" src="assets/javascript/custom.js">-->
 	
-	<script type="text/javascript" src="assets/javascript/custom.js"></script>
+	
  
  
 	

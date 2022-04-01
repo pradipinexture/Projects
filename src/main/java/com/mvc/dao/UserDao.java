@@ -19,6 +19,10 @@ public class UserDao implements UserDaoInterface{
 	public static final Connection conObject=conInstance.getConnection();
 	private static Logger logger = Logger.getLogger(UserDao.class.getName());
 
+	/*Insert user data into table
+	 * get user id that currently added
+	 * then add role into role table using userid
+	 * at last add all addresses into address table by userid*/
 	public  boolean insertData(UserModel userObj,List<AddressModel> addobj) {
 		try {
 			String sql="INSERT INTO USER(NAME, MOBILE,EMAIL,HOBBY,GENDER,BIRTHDATE,PASSWORD,IMAGE) VALUES(?,?,?,?,?,?,?,?);";
@@ -61,8 +65,9 @@ public class UserDao implements UserDaoInterface{
 		}
 
 	}
-
-	public static boolean checkUserAvailability(String email) {
+	
+	/*Bleow function check user's email id exist or not*/
+	public  boolean checkUserAvailability(String email) {
 		try {
 			PreparedStatement stateObject = conObject.prepareStatement("select email from user where email=?;");
 			stateObject.setString(1, email);
@@ -80,6 +85,8 @@ public class UserDao implements UserDaoInterface{
 			return false;
 		}
 	}
+	
+	/*Below funtion for check email and password are same or not */
 	public boolean emailPasswordCheck(String email,String password) {
 		try {
 			PreparedStatement stateObject = conObject.prepareStatement("select * from user where email=? and password=?;");
@@ -93,7 +100,8 @@ public class UserDao implements UserDaoInterface{
 			return false;
 		}
 	}
-	public static boolean passwordUpadate(String email,String password) {
+	/*This function for forgot password functionality*/
+	public boolean passwordUpadate(String email,String password) {
 		try {
 			PreparedStatement stateObject = conObject.prepareStatement("update user set password=? where email=?;");
 			stateObject.setString(1, password);
@@ -110,19 +118,10 @@ public class UserDao implements UserDaoInterface{
 			return false;
 		}
 	}
-	public  boolean adminCheck(String email) {
-		try {
-			PreparedStatement stateObject = conObject.prepareStatement("select u.email from role r, user u  where u.id=r.userid and r.roletype=1 and u.email=?");
-			stateObject.setString(1, email);
-			ResultSet rs=stateObject.executeQuery();
-			return rs.next();
-		}
-		catch(Exception e) {
-			logger.severe(e.getMessage());
-			return false;
-		}
-	}
-
+	
+	/*Below function for get perticular user detail 
+	 * and then all fetched data store into usermodel
+	 * return usermodel object*/
 	public  UserModel getUserDetail(String userEmail) {
 		UserModel user = new UserModel();
 		ResultSet rs=null;
@@ -148,27 +147,12 @@ public class UserDao implements UserDaoInterface{
 		}
 		return user;
 	}
-	public static List<AddressModel> getAllUserAddresses(int id) {
-		List<AddressModel> addressObj = new ArrayList<AddressModel>();
-		try {
-			Statement statement = conObject.createStatement();
-			ResultSet rs = statement.executeQuery("select * from address where userid="+id+";");
-
-			while (rs.next()) {
-				AddressModel address = new AddressModel();
-				address.setAddress(rs.getString(3));
-				address.setCity(rs.getString(4));
-				address.setState(rs.getString(5));
-				address.setPincode(rs.getString(6));
-				addressObj.add(address);
-			}
-		} catch (SQLException e) {
-			logger.severe(e.getMessage());
-		}
-
-		return addressObj;
-	}
-	public static List<UserModel> getAllUsers() {
+	
+	/*Below function for get all users detail 
+	 * and then all fetched data store into usermodel
+	 * store usermodel object into arraylist
+	 * return arraylist object */
+	public  List<UserModel> getAllUsers() {
 		List<UserModel> userObj = new ArrayList<UserModel>();
 		try {
 			Statement statement = conObject.createStatement();
@@ -191,7 +175,33 @@ public class UserDao implements UserDaoInterface{
 
 		return userObj;
 	}
-	public static boolean deleteUser(String email) {
+	
+	/*Below function for get all users addresses 
+	 * and then all fetched address store into addressmodel
+	 * store addressmodel object into arraylist
+	 * return arraylist object*/
+	public  List<AddressModel> getAllUserAddresses(int id) {
+		List<AddressModel> addressObj = new ArrayList<AddressModel>();
+		try {
+			Statement statement = conObject.createStatement();
+			ResultSet rs = statement.executeQuery("select * from address where userid="+id+";");
+
+			while (rs.next()) {
+				AddressModel address = new AddressModel();
+				address.setAddress(rs.getString(3));
+				address.setCity(rs.getString(4));
+				address.setState(rs.getString(5));
+				address.setPincode(rs.getString(6));
+				addressObj.add(address);
+			}
+		} catch (SQLException e) {
+			logger.severe(e.getMessage());
+		}
+
+		return addressObj;
+	}
+	/* Beloow function for delete perticular user email*/
+	public boolean deleteUser(String email) {
 		try {
 			PreparedStatement stateObject = conObject.prepareStatement("delete from user where email=?;");
 			stateObject.setString(1, email);

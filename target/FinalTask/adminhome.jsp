@@ -87,6 +87,7 @@
 				$("#table_id").dataTable();
 			});
 			// crating new click event for save button
+			
 			$(".btn").click(function() {
 				var cuEmail = $(this).attr('id');
 				console.log(cuEmail);
@@ -97,7 +98,6 @@
 						cuEmail : cuEmail,
 					},
 					success : function(data) {
-						location.reload();
 					}
 				});
 				$(this).parents("tr").animate("fast").animate({

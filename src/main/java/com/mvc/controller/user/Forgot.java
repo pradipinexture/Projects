@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.mvc.dao.UserDao;
 import com.mvc.model.AddressModel;
 import com.mvc.model.UserModel;
+import com.mvc.service.UserServiceImp;
+import com.mvc.service.UserServiceInterface;
 import com.mvc.util.EncryDecryAES;
 
 /**
@@ -35,14 +37,13 @@ public class Forgot extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");  
 		PrintWriter out = response.getWriter();
-		
-		if(UserDao.checkUserAvailability(request.getParameter("email"))) {
-			UserDao.passwordUpadate(request.getParameter("email"), EncryDecryAES.encrypt(request.getParameter("password")));
+		UserServiceInterface service=new UserServiceImp();
+		if(service.passwordUpadate(request.getParameter("email"), EncryDecryAES.encrypt(request.getParameter("password")))) {
 			response.sendRedirect("index.jsp");
 		}
 		else {
 			request.getRequestDispatcher("forgot.jsp").include(request, response);
-			out.println("<div style='color:red;text-align:center'>!! Please enter valid email</div>");
+			out.println("<div style='color:red;text-align:center'>!! Please enter valid data</div>");
 		}
 	}
 

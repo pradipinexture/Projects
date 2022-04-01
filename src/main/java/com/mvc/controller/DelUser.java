@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mvc.dao.UserDao;
+import com.mvc.service.UserServiceImp;
+import com.mvc.service.UserServiceInterface;
 
 /**
  * Servlet implementation class DelUser
@@ -33,36 +35,21 @@ public class DelUser extends HttpServlet {
 		//response.sendRedirect("adminhome.jsp");
 		response.setContentType("text/html");  
 		PrintWriter out = response.getWriter(); // for printing	
-		//
+		
+		UserDao u=new UserDao();
 		if((request.getParameter("isCheck")) != null){
-			if(UserDao.checkUserAvailability(request.getParameter("cuEmail"))){
+			if(u.checkUserAvailability(request.getParameter("cuEmail"))){
 				out.print("!! Email already exist");
-			}
+			}	
 		}
 		else {
-			if(UserDao.deleteUser(request.getParameter("cuEmail"))) {
+			if(u.deleteUser(request.getParameter("cuEmail"))) {
 				out.print("deleted successfully");
 			}
 			else {
 				out.print(" Not deleted successfully");
 			}
 		}
-		/*if(request.getParameter("isCheck") == "delete") {
-			if(UserDao.deleteUser(request.getParameter("cuEmail"))) {
-				out.print("deleted successfully");
-			}
-			else {
-				out.print(" Not deleted successfully");
-			}
-		}
-		else if(){
-			if(UserDao.checkUserAvailability(request.getParameter("cuEmail"))){
-				out.print("!! Email already exist");
-			}
-		}*/
-		
-		
-		
 	}
 
 	/**

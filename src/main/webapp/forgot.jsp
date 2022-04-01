@@ -75,8 +75,7 @@
 	<!-- 2. Custom file -->
 	<script type="text/javascript" >
 		$('#email').blur(function(){
-			var cuEmail=$(this).val();
-				
+			var cuEmail=$(this).val();	
 				$.ajax({
 				url: "DelUser",
 				type: "post",
@@ -87,12 +86,13 @@
 					success : function(data){
 						if(data != null){
 							
-							if(data.length == 0){
+							if(data.length != 0){
 								$("input").removeAttr('disabled');
-								console.log(data.length);
 							}
 							else{
 								$("#email-error").text("!! Email not exist");
+								 $('#password').prop('disabled', true);
+								 $('#c-password').prop('disabled', true);
 							}
 						}
 					}

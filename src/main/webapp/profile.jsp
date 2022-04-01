@@ -96,7 +96,8 @@ label {
 							</div>
 						</div>
 						<%
-							List<AddressModel> addModelObj= UserDao.getAllUserAddresses(userObj.getId());
+							UserDao userDao=new UserDao();
+							List<AddressModel> addModelObj= userDao.getAllUserAddresses(userObj.getId());
 							for(int i=0;i<addModelObj.size();i++){
 						%>
 						<div class="p-addresses">

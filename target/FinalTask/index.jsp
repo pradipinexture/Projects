@@ -21,7 +21,7 @@
 <body>
 	<%
 	if(session.getAttribute("admin") != null){
-		response.sendRedirect("adminhome.jsp");
+		response.sendRedirect("AdminHome");
 	}
 	else if(session.getAttribute("user") != null){
 		response.sendRedirect("profile.jsp");

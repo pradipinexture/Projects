@@ -1,5 +1,5 @@
 package com.mvc.controller;
-
+import com.mvc.util.CSVPrinting;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.mvc.dao.UserDao;
 import com.mvc.model.AddressModel;
 import com.mvc.model.UserModel;
+import com.mvc.service.UserServiceImp;
+import com.mvc.service.UserServiceInterface;
 
 /**
  * Servlet implementation class CSVPrint
@@ -33,25 +35,14 @@ public class CSVPrint extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-				String filename = "C:\\csv\\users.csv";
-				try
-				{
-				FileWriter fw = new FileWriter(filename);
-				fw.append("ID,Name,Mobile Number,Email,Hobby,Gender,Birthdate,Address,City,State,Pincode\n");
-				
-				
-				List<UserModel> userModelObj= UserDao.getAllUsers();
-				for(int i=0;i<userModelObj.size();i++){
-					fw.append("\n"+userModelObj.get(i).getId()+','+userModelObj.get(i).getName()+','+userModelObj.get(i).getMobile()+','+userModelObj.get(i).getEmail()+','+userModelObj.get(i).getHobby()+','+userModelObj.get(i).getGender()+','+userModelObj.get(i).getBirthdate()+',');
-					List<AddressModel> addModelObj= new ArrayList<AddressModel>(UserDao.getAllUserAddresses(userModelObj.get(i).getId()));
-					for(int j=0;j<addModelObj.size();j++){
-						fw.append(addModelObj.get(j).getAddress().replace(',', ' ')+','+addModelObj.get(j).getCity()+','+addModelObj.get(j).getState()+','+addModelObj.get(j).getPincode()+','+"\n,,,,,,,");
-					}	
-				}
-				fw.flush();
-				fw.close();
-				response.sendRedirect("AdminHome");
-				} catch (Exception e) {}
+		CSVPrinting csvObj=new CSVPrinting();	
+		if(csvObj.printCSV()) {
+			response.sendRedirect("AdminHome");
+		}
+		else {
+			System.out.println("There is some error");
+			response.sendRedirect("AdminHome");
+		}
 
 	}
 

@@ -1,6 +1,8 @@
 package com.mvc.controller;
 import com.mvc.dao.UserDao;
 import com.mvc.model.UserModel;
+import com.mvc.service.UserServiceImp;
+import com.mvc.service.UserServiceInterface;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +32,8 @@ public class AdminHome extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		List<UserModel> users = UserDao.getAllUsers();
+		UserServiceInterface service=new UserServiceImp();
+		List<UserModel> users = service.getAllUsers();
 		
 		request.setAttribute("users", users);
 		request.getRequestDispatcher("/adminhome.jsp").forward(request, response);

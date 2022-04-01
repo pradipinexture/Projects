@@ -1,10 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@ page import="com.mvc.dao.UserDao" %>
-<%@ page import="com.mvc.model.UserModel" %>
-<%@ page import="com.mvc.model.AddressModel" %>
 <%@ page import="java.util.*" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,86 +45,14 @@ label {
 	<!-- Banner section -->
 	<aside></aside>
 	<!-- Main section for other content  -->
-	<%
-	UserModel userObj=null;
-	if(session.getAttribute("admin") != null){
-		userObj=(UserModel)session.getAttribute("admin");
-	}
-	else if(session.getAttribute("user") != null){
-		userObj=(UserModel)session.getAttribute("user");
-	}
-	else{
-		response.sendRedirect("index.jsp");
-	}
-	%>
-	
+
 	<main>
 	
 		<div class="container">
 			<div class="row">
 				<div class="col-md-2"></div>
 				<div class="col-md-8 col-sm-12">
-					<section class="form-section">
-						<div class="personal">
-							<h4>Personal Information :</h4>
-							<div class="fields">
-								<label>Name : </label>
-								<div class="fields-value"><%=userObj.getName() %></div>
-							</div>
-							<div class="fields">
-								<label>Mobile : </label>
-								<div class="fields-value"><%=userObj.getMobile() %></div>
-							</div>
-							<div class="fields">
-								<label>Email : </label>
-								<div class="fields-value"><%=userObj.getEmail() %></div>
-							</div>
-							<div class="fields">
-								<label>Gender : </label>
-								<div class="fields-value"><%=userObj.getGender() %></div>
-							</div>
-							<div class="fields">
-								<label>Birthdate : </label>
-								<div class="fields-value"><%=userObj.getBirthdate() %></div>
-							</div>
-							<div class="fields">
-								<label>Hobby : </label>
-								<div class="fields-value"><%=userObj.getHobby() %></div>
-							</div>
-						</div>
-						<%
-							List<AddressModel> addModelObj= UserDao.getAllUserAddresses(userObj.getId());
-							for(int i=0;i<addModelObj.size();i++){
-						%>
-						<div class="p-addresses">
-							<div class="p-address">
-								<h4>Address <%=i+1 %> :</h4>
-								<div class="a-field">
-									<label>Address : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getAddress() %></div>
-								</div>
-								<div class="a-field">
-									<label>City : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getCity() %></div>
-								</div>
-								<div class="a-field">
-									<label>State : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getState() %></div>
-								</div>
-								<div class="a-field">
-									<label>Pincode : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getPincode() %></div>
-								</div>
-							</div>
-						
-						</div>
-						<% }%>
-						<form id="data-form" action="Register.jsp" method="post">
-							<div class="form-button">
-								<input id="data" type="submit" value="Update Profile">
-							</div>
-						</form>
-					</section>
+					<c:out value="${pageContext.session.id}" ></c:out>
 				</div>
 			</div>
 		</div>

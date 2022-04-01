@@ -10,15 +10,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.mvc.util.ConnectionClass;
 
-public class UserDao {
+public class UserDao implements UserDaoInterface{
 	public static final ConnectionClass conInstance=ConnectionClass.getInstance();
 	public static final Connection conObject=conInstance.getConnection();
+	private static Logger logger = Logger.getLogger(UserDao.class.getName());
 
-
-	public static boolean insertData(UserModel userObj) {
+	public  boolean insertData(UserModel userObj,List<AddressModel> addobj) {
 		try {
 			String sql="INSERT INTO USER(NAME, MOBILE,EMAIL,HOBBY,GENDER,BIRTHDATE,PASSWORD,IMAGE) VALUES(?,?,?,?,?,?,?,?);";
 			PreparedStatement stateObject = conObject.prepareStatement(sql);
@@ -31,6 +32,23 @@ public class UserDao {
 			stateObject.setString(7, userObj.getDecryPass());
 			stateObject.setBlob(8, userObj.getImage());
 			if(stateObject.executeUpdate() != 0) {
+				PreparedStatement stateObject1 = conObject.prepareStatement("select id from user where email=?;");
+				stateObject1.setString(1,userObj.getEmail() );
+				ResultSet rs=stateObject1.executeQuery();
+				rs.next();
+				PreparedStatement stateObject3 = conObject.prepareStatement("insert into role(userid,roletype) values(?,0);");
+				stateObject3.setInt(1,rs.getInt(1));
+				stateObject3.executeUpdate();
+
+				for(int i=0;i<addobj.size();i++){		
+					stateObject = conObject.prepareStatement("insert into address(userid,address,city,state,pincode) values(?,?,?,?,?);");
+					stateObject.setInt(1,rs.getInt(1));
+					stateObject.setString(2, addobj.get(i).getAddress());
+					stateObject.setString(3, addobj.get(i).getCity());
+					stateObject.setString(4, addobj.get(i).getState());
+					stateObject.setString(5, addobj.get(i).getPincode());
+					stateObject.execute();
+				}
 				return true;
 			}
 			else {
@@ -38,36 +56,12 @@ public class UserDao {
 			}
 		}
 		catch(Exception e) {
+			logger.severe(e.getMessage());
 			return false;
 		}
 
 	}
-	public static boolean insertAddress(List<AddressModel> addobj,String userName) {
-		try {
-			PreparedStatement stateObject1 = conObject.prepareStatement("select id from user where email=?;");
-			stateObject1.setString(1,userName );
-			ResultSet rs=stateObject1.executeQuery();
-			rs.next();
-			PreparedStatement stateObject3 = conObject.prepareStatement("insert into role(userid,roletype) values(?,0);");
-			stateObject3.setInt(1,rs.getInt(1));
-			stateObject3.executeUpdate();
 
-			for(int i=0;i<addobj.size();i++){
-				String sql="insert into address(userid,address,city,state,pincode) values(?,?,?,?,?);";				
-				PreparedStatement stateObject = conObject.prepareStatement(sql);
-				stateObject.setInt(1,rs.getInt(1));
-				stateObject.setString(2, addobj.get(i).getAddress());
-				stateObject.setString(3, addobj.get(i).getCity());
-				stateObject.setString(4, addobj.get(i).getState());
-				stateObject.setString(5, addobj.get(i).getPincode());
-				stateObject.execute();
-			}
-		}	
-		catch(Exception e) {
-			return false;
-		}
-		return true;
-	}	
 	public static boolean checkUserAvailability(String email) {
 		try {
 			PreparedStatement stateObject = conObject.prepareStatement("select email from user where email=?;");
@@ -82,6 +76,7 @@ public class UserDao {
 			}
 		}
 		catch(Exception e) {
+			logger.severe(e.getMessage());
 			return false;
 		}
 	}
@@ -94,7 +89,8 @@ public class UserDao {
 			return rs.next();
 		}
 		catch(Exception e) {
-			return true;
+			logger.severe(e.getMessage());
+			return false;
 		}
 	}
 	public static boolean passwordUpadate(String email,String password) {
@@ -110,10 +106,11 @@ public class UserDao {
 			}
 		}
 		catch(Exception e) {
-			return true;
+			logger.severe(e.getMessage());
+			return false;
 		}
 	}
-	public static boolean adminCheck(String email) {
+	public  boolean adminCheck(String email) {
 		try {
 			PreparedStatement stateObject = conObject.prepareStatement("select u.email from role r, user u  where u.id=r.userid and r.roletype=1 and u.email=?");
 			stateObject.setString(1, email);
@@ -121,16 +118,17 @@ public class UserDao {
 			return rs.next();
 		}
 		catch(Exception e) {
+			logger.severe(e.getMessage());
 			return false;
 		}
 	}
 
-	public static UserModel getUserDetail(String userEmail) {
+	public  UserModel getUserDetail(String userEmail) {
 		UserModel user = new UserModel();
 		ResultSet rs=null;
 		try {
 
-			PreparedStatement stateObject = conObject.prepareStatement("select * from user where email=?;");
+			PreparedStatement stateObject = conObject.prepareStatement("select u.id,u.name,u.mobile,u.email,u.hobby,u.gender,u.birthdate,u.password,r.roletype from user u,role r where u.id=r.userid and u.email=?;");
 			stateObject.setString(1, userEmail);
 			rs=stateObject.executeQuery();
 			while(rs.next()) {	
@@ -141,9 +139,13 @@ public class UserDao {
 				user.setHobby(rs.getString(5));
 				user.setGender(rs.getString(6));
 				user.setBirthdate(rs.getString(7));
+				user.setDecryPass(rs.getString(8));
+				user.setRoletype(rs.getInt(9));
 			}
 		}
-		catch(Exception e) {}
+		catch(Exception e) {
+			logger.severe(e.getMessage());
+		}
 		return user;
 	}
 	public static List<AddressModel> getAllUserAddresses(int id) {
@@ -161,7 +163,7 @@ public class UserDao {
 				addressObj.add(address);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		}
 
 		return addressObj;
@@ -184,7 +186,7 @@ public class UserDao {
 				userObj.add(user);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		}
 
 		return userObj;
@@ -201,6 +203,7 @@ public class UserDao {
 			}
 		}
 		catch(Exception e) {
+			logger.severe(e.getMessage());
 			return false;
 		}
 	}

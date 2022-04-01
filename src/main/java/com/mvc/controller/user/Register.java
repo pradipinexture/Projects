@@ -1,4 +1,6 @@
 package com.mvc.controller.user;
+import com.mvc.service.UserServiceImp;
+import com.mvc.service.UserServiceInterface;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mvc.dao.UserDao;
 import com.mvc.model.UserModel;
 import com.mvc.util.EncryDecryAES;
 import com.mvc.model.AddressModel;
@@ -27,21 +28,14 @@ public class Register extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-
-				response.setContentType("text/html");  
-				PrintWriter out = response.getWriter();
+				
+				//Make a needable objects
 				UserModel userObj=new UserModel();
 				AddressModel addModel;
 				List<AddressModel> addArrList=new ArrayList<AddressModel>();
-				/*String email=request.getParameter("email");
-				if(UserDao.checkUserAvailability(email)) {
-					out.println("User exist.");
-				}
-				else {
-					out.println("User not exist.");
-				}*/
-				// Take all values from dom and set it in model
+				UserServiceInterface service=new UserServiceImp();
+		
+				// set all datas into usermodel and addressmodel
 				userObj.setName(request.getParameter("name"));
 				userObj.setEmail(request.getParameter("email"));
 				userObj.setMobile(request.getParameter("mobile"));
@@ -56,6 +50,7 @@ public class Register extends HttpServlet {
 				String city[]=request.getParameterValues("city");
 				String state[]=request.getParameterValues("state");
 				String pincode[]=request.getParameterValues("pincode");
+				// take one address then set into addressmodel and then pass that object in arraylist for number of addresses
 				for(int i =0 ; i < address.length ; i++) {
 					addModel=new AddressModel();
 					addModel.setAddress(address[i]);
@@ -64,21 +59,15 @@ public class Register extends HttpServlet {
 					addModel.setPincode(pincode[i]);
 					addArrList.add(addModel);
 				}
-				if(UserDao.insertData(userObj)) {
-					UserDao.insertAddress(addArrList,userObj.getEmail());
+				
+				// Now call we call service method for validating and inserting data
+				if(service.insertData(userObj,addArrList)) {
 					response.sendRedirect("index.jsp");	
 				}
+				
 				else {
 					response.sendRedirect("Register.jsp");	
 				}
-				/*
-				if(RegisterService.validateFields(userObj)) {
-					response.sendRedirect("Login");
-				}
-				else {
-					out.print("Not Done");
-				}*/
-				 // insert all data into user table
 				
 	}
 

@@ -1,9 +1,23 @@
 package com.mvc.util;
 
+import com.mvc.model.UserModel;
+
 public class Validation {
 
-	public Validation() {
-		// TODO Auto-generated constructor stub
+	public  boolean validateFields(UserModel userObj) {
+		
+		Validation valObj = new Validation();
+		AlphaValidate("Done");
+		if(AlphaValidate(userObj.getName())&& 
+				mobileValidate(userObj.getMobile())&& 
+					emailValidate(userObj.getEmail()) && 
+						passwordValidate(userObj.getPassword())  && 
+							cPasswordValidate(userObj.getPassword(),userObj.getCpassword()) ) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	public boolean nullCheck(String alphaString){
 		

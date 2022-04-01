@@ -46,11 +46,11 @@ public class CSVPrint extends HttpServlet {
 					List<AddressModel> addModelObj= new ArrayList<AddressModel>(UserDao.getAllUserAddresses(userModelObj.get(i).getId()));
 					for(int j=0;j<addModelObj.size();j++){
 						fw.append(addModelObj.get(j).getAddress().replace(',', ' ')+','+addModelObj.get(j).getCity()+','+addModelObj.get(j).getState()+','+addModelObj.get(j).getPincode()+','+"\n,,,,,,,");
-					}
+					}	
 				}
 				fw.flush();
 				fw.close();
-				response.sendRedirect("adminhome.jsp");
+				response.sendRedirect("AdminHome");
 				} catch (Exception e) {}
 
 	}

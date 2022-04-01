@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import com.mvc.dao.UserDao;
 import com.mvc.model.UserModel;
+import com.mvc.service.UserServiceImp;
+import com.mvc.service.UserServiceInterface;
 
 /**
  * Servlet implementation class Login
@@ -30,24 +32,28 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session1=request.getSession(false);  
+		
+		HttpSession session1=request.getSession(false); 
+		UserServiceInterface service =new UserServiceImp();
+		
 		response.setContentType("text/html");  
 		PrintWriter out = response.getWriter(); // for printing	
+		
 		String email=request.getParameter("email");
 		String password=EncryDecryAES.encrypt(request.getParameter("password"));
+		
 		request.getRequestDispatcher("index.jsp").include(request, response); 
 		
-		if(session1.getAttribute("user") == null && session1.getAttribute("admin") == null){//|| session1.getAttribute("email").equals("")) {
-			UserDao e =new UserDao();
+		if(session1.getAttribute("user") == null && session1.getAttribute("admin") == null){
 			if(email != null && password != null) {
-				if(e.emailPasswordCheck(email, password)) {
-					UserModel userObj=UserDao.getUserDetail(email);
+				if(service.loginCheck(email, password)) {
+					UserModel userObj=service.getUserDetail(email);
 					HttpSession session=request.getSession(true);
 					
-					if(UserDao.adminCheck(email)) {
+					if(userObj.getRoletype() == 1) {
 						
 						session.setAttribute("admin",userObj);
-						response.sendRedirect("adminhome.jsp");
+						response.sendRedirect("AdminHome");
 					}
 					else {
 						session.setAttribute("user",userObj); // user object save in session
@@ -60,7 +66,7 @@ public class Login extends HttpServlet {
 			}
 		}
 		else if(session1.getAttribute("admin") != null) {
-			response.sendRedirect("adminhome.jsp");
+			response.sendRedirect("AdminHome");
 		}
 		else {
 			response.sendRedirect("profile.jsp");

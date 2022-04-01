@@ -1,29 +1,35 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<%@ page import="java.sql.*"%>
+<%@ page import="java.io.*"%>
+<%
+Blob image = null;
+Connection con = null;
+byte[] imgData = null;
+Statement stmt = null;
+ResultSet rs = null;
+try {
 
-        <script type='text/javascript'>
-         $(document).ready(function() {
-            //option A
-            var a=0;
-            $("form").submit(function(e){
-                if(++a>=4){
-                }
-                else{
-                	e.preventDefault(e);
-                }
-            });
-        });
-        </script>
-    </head>
+	Class.forName("com.mysql.jdbc.Driver");
+	con = DriverManager.getConnection("jdbc:mysql:// localhost:3306/project", "root", "99097@Pradip");
+	stmt = con.createStatement();
+	rs = stmt.executeQuery("select image from user where id = 84");
+	if (rs.next()) {
+		
+	//	image = rs.getBlob(1);
+		//imgData = image.getBytes(1, (int) image.length());
+	} 
+	else {
+		out.println("Display Blob Example");
+		out.println("image not found for given id>");
+		return;
+	}
+	// display the image
+	//response.setContentType("image/jpg");
+	//OutputStream o = response.getOutputStream();
+	//o.write(imgData);
+	//o.flush();
+	//o.close();
+} catch (Exception e) {}
+%>
+<td><img src="<%=rs.getString(1) %>" height="100px" width="100px"></td>
 
-    <body>
-        <form action="http://google.com" method="post">
-          Search <input type='text' name='q' />
-          <input type='submit'/>
-        </form>
-    </body>
-</html>
+sdfghfh

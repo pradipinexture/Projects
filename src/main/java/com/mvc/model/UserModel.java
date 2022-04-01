@@ -14,7 +14,14 @@ public class UserModel {
 	private String cpassword;
 	private String decryPass;
 	private InputStream image;
+	private int roletype;
 	
+	public int getRoletype() {
+		return roletype;
+	}
+	public void setRoletype(int roletype) {
+		this.roletype = roletype;
+	}
 	public String getDecryPass() {
 		return decryPass;
 	}

@@ -1,14 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@ page import="com.mvc.dao.UserDao" %>
-<%@ page import="com.mvc.model.UserModel" %>
-<%@ page import="java.util.*" %>
-<%
-	UserModel userObj=null;
-	if(session.getAttribute("admin") == null){
-		response.sendRedirect("index.jsp");
-	}
-	%>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,85 +8,104 @@
 <!-- 1.Library -->
 <link href="assets/library/bootstrap/css/bootstrap.min.css"
 	type="text/css" rel="stylesheet" />
-			<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
 <!-- 2.custom file -->
 <link href="assets/css/custom.css" type="text/css" rel="stylesheet" />
 <style type="text/css">
-	.form-section2{
-		height: auto;
-		min-height: 510px;
-	}
+.form-section2 {
+	height: auto;
+	min-height: 510px;
+}
+
+#csv-btn {
+	margin-top: 3%;
+	margin-left: 43%;
+}
 </style>
 
-<script type="text/javascript" src="assets/javascript/jquery-3.6.0.min.js"></script>
+<script type="text/javascript"
+	src="assets/javascript/jquery-3.6.0.min.js"></script>
 </head>
-<body>	
-	
-	<jsp:include page="header.jsp"/>
-	<%
-		List<UserModel> addModelObj= UserDao.getAllUsers();
-		if(!addModelObj.isEmpty()){
-	
-	%>
+<body>
+	<jsp:include page="header.jsp" />
+
 	<section class="form-section2">
-		<table class="table">
-		  <thead class="thead-light">
-		    <tr>
-		      <th scope="col">#</th>
-		      <th scope="col">Name</th>
-		      <th scope="col">Email</th>
-		      <th scope="col">Gender</th>
-		      <th scope="col">Edit</th>
-		      <th scope="col">Delete</th>
-		      
-		    </tr>
-		  </thead>
-		  <tbody>
-		  	<%
-				for(int i=0;i<addModelObj.size();i++){
-			%>
-		    <tr class="row">
-		      <th scope="row"><%=i+1 %></th>
-		      <td><a href="#"><%=addModelObj.get(i).getName() %></a></td>
-		      <td><%=addModelObj.get(i).getEmail() %></td>
-		      <td><%=addModelObj.get(i).getGender() %></td>
-		      <td><button type="button" class="btn btn-success">Edit</button></td>
-		      <td><a id='<%=addModelObj.get(i).getEmail() %>' class="btn btn-danger" >Delete</a></td>
-		    </tr>
-		    <%}}else{out.print("!! Sorry Users are not avilable.");}%>
-		    <tr class="row">
-		      <td><a class="btn btn-success" href="CSVPrint">Generate CSV File</a></td>
-		    </tr>
-		  </tbody>
-			</table>
-
-	</section>
-	<jsp:include page="footer.jsp"/>
-	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
-	<script>
-	$(document).ready(function() {
-		
-		$(function() {
-			$("#table_id").dataTable();
-		});
-		// crating new click event for save button
-		$(".btn").click(function() {
-			var cuEmail=$(this).attr('id');
-				$.ajax({
-				url: "DelUser",
-				type: "post",
-				data: {
-					cuEmail : cuEmail,
-				},
-				success : function(data){}
-				});
-				$(this).parents(".row").animate("fast").animate({
-			        opacity: "hide"
-			    }, "slow");
-		});
-	});
-</script>
+		<c:choose>
+			<c:when test="${empty users}">
+				<p>Data not available.</p>
+			</c:when>
+			<c:otherwise>
+					<table id="table_id" class="ui celled table" style="width: 100%">
+						<thead>
+							<tr>
+								<th>Emp ID</th>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Gender</th>
+								<th>Edit</th>
+								<th>Delete</th>
 	
+							</tr>
+						</thead>
+						<c:forEach var="h" items="${users}">
+							
+							<tbody>
+								<tr>
+									<td><c:out value="${h.id}" /></td>
+									<td><c:out value="${h.name}" /></td>
+									<td><c:out value="${h.email}" /></td>
+									<td><c:out value="${h.gender}" /></td>
+									<td><button type="button" class="btn btn-success">Edit</button></td>
+									<td><a id='<c:out value="${h.email}" />' class="btn btn-danger">Delete</a></td>
+								</tr>
+							</tbody>
+						</c:forEach>
+					</table>
+					<div id="csv-btn">
+						<a class="btn btn-success" href="CSVPrint">Generate CSV File</a>
+					</div>	
+			</c:otherwise>
+		</c:choose>
+	</section>
+
+
+
+	<br>
+	<jsp:include page="footer.jsp" />
+
+	<script type="text/javascript" charset="utf8"
+		src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+	<script>
+		
+	</script>
+	<script>
+		$(document).ready(function() {
+			$(function() {
+				$("#table_id").dataTable();
+			});
+			// crating new click event for save button
+			
+			$(".btn").click(function() {
+				var cuEmail = $(this).attr('id');
+				console.log(cuEmail);
+				$.ajax({
+					url : "DelUser",
+					type : "post",
+					data : {
+						cuEmail : cuEmail,
+					},
+					success : function(data) {
+					}
+				});
+				$(this).parents("tr").animate("fast").animate({
+					opacity : "hide"
+				}, "slow");
+			});
+		});
+	</script>
+
 </body>
 </html>

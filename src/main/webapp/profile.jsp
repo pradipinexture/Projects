@@ -40,6 +40,13 @@ label {
 	font-size: 16px;
 	color: blue;
 }
+#profile-img{
+	height:10%;
+	width:20%;
+	border: 1px solid black;
+	border-radius:50%;
+	margin-left:37%; 
+}
 </style>
 
 </head>
@@ -49,16 +56,8 @@ label {
 	<aside></aside>
 	<!-- Main section for other content  -->
 	<%
-	UserModel userObj=null;
-	if(session.getAttribute("admin") != null){
-		userObj=(UserModel)session.getAttribute("admin");
-	}
-	else if(session.getAttribute("user") != null){
-		userObj=(UserModel)session.getAttribute("user");
-	}
-	else{
-		response.sendRedirect("index.jsp");
-	}
+	UserModel userObj=(UserModel)session.getAttribute("user");
+
 	%>
 	
 	<main>
@@ -70,6 +69,11 @@ label {
 					<section class="form-section">
 						<div class="personal">
 							<h4>Personal Information :</h4>
+							<div class="fields">
+									<!-- assets/images/Image.png -->
+									<img id="profile-img" alt="Profile Image" src="Test">
+								
+							</div>
 							<div class="fields">
 								<label>Name : </label>
 								<div class="fields-value"><%=userObj.getName() %></div>

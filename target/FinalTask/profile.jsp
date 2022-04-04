@@ -49,16 +49,7 @@ label {
 	<aside></aside>
 	<!-- Main section for other content  -->
 	<%
-	UserModel userObj=null;
-	if(session.getAttribute("admin") != null){
-		userObj=(UserModel)session.getAttribute("admin");
-	}
-	else if(session.getAttribute("user") != null){
-		userObj=(UserModel)session.getAttribute("user");
-	}
-	else{
-		response.sendRedirect("index.jsp");
-	}
+	UserModel userObj=(UserModel)session.getAttribute("user");
 	%>
 	
 	<main>
@@ -70,6 +61,11 @@ label {
 					<section class="form-section">
 						<div class="personal">
 							<h4>Personal Information :</h4>
+							<div class="fields">
+								<div class="fields-value">
+									<img alt="Profile Image" src="/assets/images/Image.png" height="200px" width="200px">
+								</div>
+							</div>
 							<div class="fields">
 								<label>Name : </label>
 								<div class="fields-value"><%=userObj.getName() %></div>

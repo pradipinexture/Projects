@@ -1,8 +1,8 @@
 package com.mvc.dao;
+import org.apache.log4j.Logger;
 import com.mvc.model.AddressModel;
 import com.mvc.model.UserModel;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +10,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import javax.servlet.ServletOutputStream;
 
 import com.mvc.util.ConnectionClass;
 
 public class UserDao implements UserDaoInterface{
 	public static final ConnectionClass conInstance=ConnectionClass.getInstance();
 	public static final Connection conObject=conInstance.getConnection();
-	private static Logger logger = Logger.getLogger(UserDao.class.getName());
+	private final Logger logger = Logger.getLogger(this.getClass());
 
 	/*Insert user data into table
 	 * get user id that currently added
@@ -60,7 +61,7 @@ public class UserDao implements UserDaoInterface{
 			}
 		}
 		catch(Exception e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 			return false;
 		}
 
@@ -81,7 +82,7 @@ public class UserDao implements UserDaoInterface{
 			}
 		}
 		catch(Exception e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 			return false;
 		}
 	}
@@ -96,7 +97,7 @@ public class UserDao implements UserDaoInterface{
 			return rs.next();
 		}
 		catch(Exception e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 			return false;
 		}
 	}
@@ -114,7 +115,7 @@ public class UserDao implements UserDaoInterface{
 			}
 		}
 		catch(Exception e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 			return false;
 		}
 	}
@@ -143,7 +144,7 @@ public class UserDao implements UserDaoInterface{
 			}
 		}
 		catch(Exception e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 		}
 		return user;
 	}
@@ -170,7 +171,7 @@ public class UserDao implements UserDaoInterface{
 				userObj.add(user);
 			}
 		} catch (SQLException e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 		}
 
 		return userObj;
@@ -188,14 +189,16 @@ public class UserDao implements UserDaoInterface{
 
 			while (rs.next()) {
 				AddressModel address = new AddressModel();
+				address.setId(rs.getInt(1));
 				address.setAddress(rs.getString(3));
 				address.setCity(rs.getString(4));
 				address.setState(rs.getString(5));
 				address.setPincode(rs.getString(6));
 				addressObj.add(address);
 			}
-		} catch (SQLException e) {
-			logger.severe(e.getMessage());
+		} 
+		catch (SQLException e) {
+			logger.error("There is error : "+e);
 		}
 
 		return addressObj;
@@ -213,9 +216,21 @@ public class UserDao implements UserDaoInterface{
 			}
 		}
 		catch(Exception e) {
-			logger.severe(e.getMessage());
+			logger.error("There is error : "+e);
 			return false;
 		}
+	}
+	public byte[] getImage() {
+		byte[] imageByte=null;
+		try {
+			PreparedStatement stateObject1 = conObject.prepareStatement("select image from user where id=84");
+			ResultSet rs=stateObject1.executeQuery();
+			if(rs.next()) {
+				imageByte=rs.getBytes(1);
+			}
+		}
+		catch(Exception e) {}
+		return imageByte;
 	}
 
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="com.mvc.model.UserModel" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,11 +35,13 @@
 		        <li><a href="profile.jsp">Profile</a></li>
 		         
 		        <%
-					if(session.getAttribute("admin") != null){
+		        
+		        UserModel userObjec=(UserModel) (session.getAttribute("user"));
+		    		if(userObjec.getRoletype() == 1){
 				%>
-		         <li class="active"><a href="adminhome.jsp">Users</a></li>
+		         <li class="active"><a href="AdminHome">Users</a></li>
 		      	<%
-		      		} 
+		      	}
 		      	%>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">

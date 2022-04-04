@@ -19,14 +19,7 @@
 </head>
 
 <body>
-	<%
-	if(session.getAttribute("admin") != null){
-		response.sendRedirect("AdminHome");
-	}
-	else if(session.getAttribute("user") != null){
-		response.sendRedirect("profile.jsp");
-	}
-	%>
+	
 	<!-- Banner section -->
 	<aside></aside>
 

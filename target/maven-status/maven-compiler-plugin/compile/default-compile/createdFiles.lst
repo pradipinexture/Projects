@@ -10,8 +10,10 @@ com\mvc\util\EncryDecryAES.class
 com\mvc\service\RegisterService.class
 com\mvc\util\Validation.class
 com\mvc\service\test.class
+com\mvc\controller\UserFilter.class
 com\mvc\dao\UserDao.class
 com\mvc\model\UserModel.class
+com\mvc\controller\Test.class
 com\mvc\controller\CSVPrint.class
 com\mvc\controller\Logout.class
 com\mvc\service\UserServiceInterface.class

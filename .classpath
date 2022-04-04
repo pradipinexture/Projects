@@ -26,5 +26,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/pradip/Downloads/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/pradip/Desktop/apache-tomcat-9.0.58/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

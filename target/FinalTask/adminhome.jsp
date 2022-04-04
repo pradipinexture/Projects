@@ -33,6 +33,7 @@
 	<jsp:include page="header.jsp" />
 
 	<section class="form-section2">
+		
 		<c:choose>
 			<c:when test="${empty users}">
 				<p>Data not available.</p>

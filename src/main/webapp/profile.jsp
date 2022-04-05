@@ -4,7 +4,8 @@
 <%@ page import="com.mvc.model.UserModel" %>
 <%@ page import="com.mvc.model.AddressModel" %>
 <%@ page import="java.util.*" %>
-<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,10 +56,7 @@ label {
 	<!-- Banner section -->
 	<aside></aside>
 	<!-- Main section for other content  -->
-	<%
-	UserModel userObj=(UserModel)session.getAttribute("user");
 
-	%>
 	
 	<main>
 	
@@ -68,6 +66,7 @@ label {
 				<div class="col-md-8 col-sm-12">
 					<section class="form-section">
 						<div class="personal">
+					
 							<h4>Personal Information :</h4>
 							<div class="fields">
 									<!-- assets/images/Image.png -->
@@ -76,62 +75,63 @@ label {
 							</div>
 							<div class="fields">
 								<label>Name : </label>
-								<div class="fields-value"><%=userObj.getName() %></div>
+								<div class="fields-value"><c:out value="${user.name}" /></div>
 							</div>
 							<div class="fields">
 								<label>Mobile : </label>
-								<div class="fields-value"><%=userObj.getMobile() %></div>
+								<div class="fields-value"><c:out value="${user.mobile}" /></div>
 							</div>
 							<div class="fields">
 								<label>Email : </label>
-								<div class="fields-value"><%=userObj.getEmail() %></div>
+								<div class="fields-value"><c:out value="${user.email}" /></div>
 							</div>
 							<div class="fields">
 								<label>Gender : </label>
-								<div class="fields-value"><%=userObj.getGender() %></div>
+								<div class="fields-value"><c:out value="${user.gender}" /></div>
 							</div>
 							<div class="fields">
 								<label>Birthdate : </label>
-								<div class="fields-value"><%=userObj.getBirthdate() %></div>
+								<div class="fields-value"><c:out value="${user.birthdate}" /></div>
 							</div>
 							<div class="fields">
 								<label>Hobby : </label>
-								<div class="fields-value"><%=userObj.getHobby() %></div>
+								<div class="fields-value"><c:out value="${user.hobby}" /></div>
 							</div>
 						</div>
-						<%
-							UserDao userDao=new UserDao();
-							List<AddressModel> addModelObj= userDao.getAllUserAddresses(userObj.getId());
-							for(int i=0;i<addModelObj.size();i++){
-						%>
-						<div class="p-addresses">
-							<div class="p-address">
-								<h4>Address <%=i+1 %> :</h4>
-								<div class="a-field">
-									<label>Address : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getAddress() %></div>
+		<c:choose>
+			<c:when test="${empty addresses}">
+				<p>Address not available.</p>
+			</c:when>
+			<c:otherwise>
+						<c:forEach var="addr" items="${addresses}">	
+							<div class="p-addresses">
+								<div class="p-address">
+									<h4>Address :</h4>
+									<div class="a-field">
+										<label>Address : </label>
+										<div class="fields-value"><c:out value="${addr.address}" /></div>
+									</div>
+									<div class="a-field">
+										<label>City : </label>
+										<div class="fields-value"><c:out value="${addr.city}" /></div>
+									</div>
+									<div class="a-field">
+										<label>State : </label>
+										<div class="fields-value"><c:out value="${addr.state}" /></div>
+									</div>
+									<div class="a-field">
+										<label>Pincode : </label>
+										<div class="fields-value"><c:out value="${addr.pincode}" /></div>
+									</div>
 								</div>
-								<div class="a-field">
-									<label>City : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getCity() %></div>
-								</div>
-								<div class="a-field">
-									<label>State : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getState() %></div>
-								</div>
-								<div class="a-field">
-									<label>Pincode : </label>
-									<div class="fields-value"><%=addModelObj.get(i).getPincode() %></div>
-								</div>
-							</div>
-						
-						</div>
-						<% }%>
-						<form id="data-form" action="Register.jsp" method="post">
+							</div>					
+							
+						</c:forEach>
+			</c:otherwise>
+		</c:choose>
 							<div class="form-button">
-								<input id="data" type="submit" value="Update Profile">
-							</div>
-						</form>
+								<a id="data" href="EditProfile?editEmail=<c:out value="${user.email}"/>&editId=<c:out value="${user.id}"/>"  class="btn btn-success">Edit</a>
+							</div>					
 					</section>
 				</div>
 			</div>

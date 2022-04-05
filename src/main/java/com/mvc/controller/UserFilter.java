@@ -43,37 +43,34 @@ public class UserFilter  implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+//		chain.doFilter(request, response);
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		String path=httpRequest.getServletPath();
+		((HttpServletResponse) response).setHeader("Cache-Control","no-cache, no-store, must-revalidate"); 
+		HttpSession session=httpRequest.getSession(false);
+		UserModel userObjec=null;
+		boolean isOtherPage=path.startsWith("/Register") || path.startsWith("/index") || path.startsWith("/Login") || path.startsWith("/forgot");
+		if(session != null) {
+			userObjec=(UserModel) (session.getAttribute("user"));
+		}
 		
-		chain.doFilter(request, response);
-		
-//		HttpServletRequest httpRequest = (HttpServletRequest) request;
-//		String path=httpRequest.getServletPath();
-//		((HttpServletResponse) response).setHeader("Cache-Control","no-cache, no-store, must-revalidate"); 
-//		HttpSession session=httpRequest.getSession(false);
-//		UserModel userObjec=null;
-//		
-//		if(session != null) {
-//			userObjec=(UserModel) (session.getAttribute("user"));
-//		}
-//		
-//		if(userObjec  !=null) {
-//        	 
-//        	 if(path.startsWith("/Register") || path.startsWith("/index") || path.startsWith("/Login") ) {
-//        		 ((HttpServletResponse) response).sendRedirect("profile.jsp");
-//            }
-//         	else {
-//         		chain.doFilter(request, response);
-//         	}
-//        }
-//        else{
-//        	if(path.startsWith("/Register") || path.startsWith("/index")  || path.startsWith("/Login") ) {
-//        		chain.doFilter(request, response);
-//    			
-//           }
-//        	else {
-//        		((HttpServletResponse) response).sendRedirect("index.jsp");
-//        	}
-//        }		
+		if(userObjec  !=null) {
+        	 
+        	 if(path.startsWith("/index") || path.startsWith("/Login") || path.startsWith("/forgot")) {
+        		 ((HttpServletResponse) response).sendRedirect("Profile");
+            }
+         	else {
+         		chain.doFilter(request, response);
+         	}
+        }
+        else{
+        	if(isOtherPage) {
+        		chain.doFilter(request, response);
+           }
+        	else {
+        		((HttpServletResponse) response).sendRedirect("index.jsp");
+        	}
+        }		
 	}
 
 	/**

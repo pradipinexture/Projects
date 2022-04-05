@@ -59,8 +59,9 @@
 									<td><c:out value="${h.name}" /></td>
 									<td><c:out value="${h.email}" /></td>
 									<td><c:out value="${h.gender}" /></td>
-									<td><button type="button" class="btn btn-success">Edit</button></td>
-									<td><a id='<c:out value="${h.email}" />' class="btn btn-danger">Delete</a></td>
+								
+									<td><a href="EditProfile?email=<c:out value="${h.email}"/>&id=<c:out value="${h.id}"/>"  class="btn btn-success">Edit</a></td>
+									<td><a id='<c:out value="${h.email}" />' class="btn btn-danger del-user">Delete</a></td>
 								</tr>
 							</tbody>
 						</c:forEach>
@@ -89,7 +90,7 @@
 			});
 			// crating new click event for save button
 			
-			$(".btn").click(function() {
+			$(".del-user").click(function() {
 				var cuEmail = $(this).attr('id');
 				console.log(cuEmail);
 				$.ajax({
@@ -100,7 +101,7 @@
 					},
 					success : function(data) {
 					}
-				});
+				});	
 				$(this).parents("tr").animate("fast").animate({
 					opacity : "hide"
 				}, "slow");

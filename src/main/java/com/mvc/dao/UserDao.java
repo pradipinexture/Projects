@@ -14,6 +14,7 @@ import java.util.List;
 import javax.servlet.ServletOutputStream;
 
 import com.mvc.util.ConnectionClass;
+import com.mvc.util.EncryDecryAES;
 
 public class UserDao implements UserDaoInterface{
 	public static final ConnectionClass conInstance=ConnectionClass.getInstance();
@@ -140,6 +141,7 @@ public class UserDao implements UserDaoInterface{
 				user.setGender(rs.getString(6));
 				user.setBirthdate(rs.getString(7));
 				user.setDecryPass(rs.getString(8));
+				user.setPassword(EncryDecryAES.decrypt(rs.getString(8)));			
 				user.setRoletype(rs.getInt(9));
 			}
 		}
@@ -220,10 +222,11 @@ public class UserDao implements UserDaoInterface{
 			return false;
 		}
 	}
-	public byte[] getImage() {
+	public byte[] getImage(String email) {
 		byte[] imageByte=null;
 		try {
-			PreparedStatement stateObject1 = conObject.prepareStatement("select image from user where id=84");
+			PreparedStatement stateObject1 = conObject.prepareStatement("select image from user where email=?");
+			stateObject1.setString(1, email);
 			ResultSet rs=stateObject1.executeQuery();
 			if(rs.next()) {
 				imageByte=rs.getBytes(1);

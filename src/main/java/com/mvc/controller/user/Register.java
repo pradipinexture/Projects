@@ -35,38 +35,50 @@ public class Register extends HttpServlet {
 				List<AddressModel> addArrList=new ArrayList<AddressModel>();
 				UserServiceInterface service=new UserServiceImp();
 		
-				// set all datas into usermodel and addressmodel
-				userObj.setName(request.getParameter("name"));
-				userObj.setEmail(request.getParameter("email"));
-				userObj.setMobile(request.getParameter("mobile"));
-				userObj.setBirthdate(request.getParameter("birthdate"));
-				userObj.setHobby(request.getParameter("hobby"));
-				userObj.setGender(request.getParameter("gender"));
-				userObj.setPassword(request.getParameter("password"));
-				userObj.setCpassword(request.getParameter("cpassword"));
-				userObj.setDecryPass(EncryDecryAES.encrypt(request.getParameter("password")));
-				userObj.setImage(request.getPart("image").getInputStream());
-				String address[]=request.getParameterValues("address");
-				String city[]=request.getParameterValues("city");
-				String state[]=request.getParameterValues("state");
-				String pincode[]=request.getParameterValues("pincode");
-				// take one address then set into addressmodel and then pass that object in arraylist for number of addresses
-				for(int i =0 ; i < address.length ; i++) {
-					addModel=new AddressModel();
-					addModel.setAddress(address[i]);
-					addModel.setCity(city[i]);
-					addModel.setState(state[i]);
-					addModel.setPincode(pincode[i]);
-					addArrList.add(addModel);
+				try {
+					// set all datas into usermodel and addressmodel
+					userObj.setName(request.getParameter("name"));
+					userObj.setEmail(request.getParameter("email"));
+					userObj.setMobile(request.getParameter("mobile"));
+					userObj.setBirthdate(request.getParameter("birthdate"));
+					userObj.setHobby(request.getParameter("hobby"));
+					userObj.setGender(request.getParameter("gender"));
+					userObj.setPassword(request.getParameter("password"));
+					userObj.setCpassword(request.getParameter("cpassword"));
+					userObj.setDecryPass(EncryDecryAES.encrypt(request.getParameter("password")));
+					userObj.setImage(request.getPart("image").getInputStream());
+					
+					String address[]=request.getParameterValues("address");
+					String city[]=request.getParameterValues("city");
+					String state[]=request.getParameterValues("state");
+					String pincode[]=request.getParameterValues("pincode");
+					
+					// take one address then set into addressmodel and then pass that object in arraylist for number of addresses
+					for(int i =0 ; i < address.length ; i++) {
+						addModel=new AddressModel();
+						addModel.setAddress(address[i]);
+						addModel.setCity(city[i]);
+						addModel.setState(state[i]);
+						addModel.setPincode(pincode[i]);
+						addArrList.add(addModel);
+					}
+					
+					// Now call we call service method for validating and inserting data
+					if(service.insertData(userObj,addArrList)) {
+						System.out.println("User added successfully");
+						response.sendRedirect("index.jsp");	
+						
+					}
+					
+					else {
+						System.out.println("User not added successfully");
+						response.sendRedirect("Register.jsp");	
+					}
 				}
 				
-				// Now call we call service method for validating and inserting data
-				if(service.insertData(userObj,addArrList)) {
-					response.sendRedirect("index.jsp");	
-				}
-				
-				else {
-					response.sendRedirect("Register.jsp");	
+				catch(Exception e) {
+					System.out.print("Error is : "+e);
+					response.sendRedirect("index.jsp");
 				}
 				
 	}

@@ -88,6 +88,7 @@
 							
 							if(data.length != 0){
 								$("input").removeAttr('disabled');
+								$("#email-error").text("");
 							}
 							else{
 								$("#email-error").text("!! Email not exist");

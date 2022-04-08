@@ -35,11 +35,11 @@
 		        <li><a href="Profile">Profile</a></li>
 		         
 		        <%
-		        
-		        UserModel userObjec=(UserModel) (session.getAttribute("user"));
+		        	UserModel userObjec=(UserModel) (session.getAttribute("user"));
 		    		if(userObjec.getRoletype() == 1){
 				%>
-		         <li class="active"><a href="AdminHome">Users</a></li>
+		         <li class=""><a href="AdminHome">View All User</a></li>
+		         <li class=""><a href="Register.jsp">Add New User</a></li>
 		      	<%
 		      	}
 		      	%>

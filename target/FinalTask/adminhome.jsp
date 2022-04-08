@@ -60,7 +60,7 @@
 									<td><c:out value="${h.email}" /></td>
 									<td><c:out value="${h.gender}" /></td>
 								
-									<td><a href="EditProfile?email=<c:out value="${h.email}"/>&id=<c:out value="${h.id}"/>"  class="btn btn-success">Edit</a></td>
+									<td><a href="EditProfile?editEmail=<c:out value="${h.email}"/>&editId=<c:out value="${h.id}"/>"  class="btn btn-success">Edit</a></td>
 									<td><a id='<c:out value="${h.email}" />' class="btn btn-danger del-user">Delete</a></td>
 								</tr>
 							</tbody>

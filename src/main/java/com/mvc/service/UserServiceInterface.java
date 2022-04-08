@@ -23,4 +23,6 @@ public interface UserServiceInterface {
 	
 	public boolean deleteUser(String email); // admin delete perticular user
 
+	public boolean updateUserData(UserModel userObj, List<AddressModel> insertData, List<AddressModel> updateData);
+
 }

@@ -15,5 +15,5 @@ public interface UserDaoInterface {
 	public  List<AddressModel> getAllUserAddresses(int id);
 	public  List<UserModel> getAllUsers();
 	public boolean deleteUser(String email);
-	
+	boolean updateUserData(UserModel userObj, List<AddressModel> insertData, List<AddressModel> updateData);
 }

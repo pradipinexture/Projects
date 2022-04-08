@@ -27,14 +27,21 @@ public class CSVPrint extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		CSVPrinting csvObj=new CSVPrinting();	
-		if(csvObj.printCSV()) {
-			response.sendRedirect("adminhome.jsp");
+		try {
+			CSVPrinting csvObj=new CSVPrinting();	
+			if(csvObj.printCSV()) {
+				response.sendRedirect("AdminHome");
+			}
+			else {
+				System.out.println("There is some error");
+				response.sendRedirect("AdminHome");
+			}
 		}
-		else {
-			System.out.println("There is some error");
-			response.sendRedirect("adminhome.jsp");
+		catch(Exception e) {
+			System.out.print("Error is : "+e);
+			response.sendRedirect("index.jsp");
 		}
+		
 
 	}
 

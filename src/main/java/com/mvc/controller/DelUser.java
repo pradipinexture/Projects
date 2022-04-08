@@ -33,23 +33,30 @@ public class DelUser extends HttpServlet {
 		// TODO Auto-generated method stub
 		//UserDao.deleteUser(request.getParameter("email"));
 		//response.sendRedirect("adminhome.jsp");
-		response.setContentType("text/html");  
-		PrintWriter out = response.getWriter(); // for printing	
-		
-		UserDao u=new UserDao();
-		if((request.getParameter("isCheck")) != null){
-			if(u.checkUserAvailability(request.getParameter("cuEmail"))){
-				out.print("!! Email already exist");
-			}	
-		}
-		else {
-			if(u.deleteUser(request.getParameter("cuEmail"))) {
-				out.print("deleted successfully");
+		try {
+			response.setContentType("text/html");  
+			PrintWriter out = response.getWriter(); // for printing	
+			
+			UserDao u=new UserDao();
+			if((request.getParameter("isCheck")) != null){
+				if(u.checkUserAvailability(request.getParameter("cuEmail"))){
+					out.print("!! Email already exist");
+				}	
 			}
 			else {
-				out.print(" Not deleted successfully");
+				if(u.deleteUser(request.getParameter("cuEmail"))) {
+					out.print("deleted successfully");
+				}
+				else {
+					out.print(" Not deleted successfully");
+				}
 			}
 		}
+		catch(Exception e) {
+			System.out.print("Error is : "+e);
+			response.sendRedirect("index.jsp");
+		}
+	
 	}
 
 	/**

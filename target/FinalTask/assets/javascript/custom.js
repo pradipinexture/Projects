@@ -2,9 +2,10 @@
 $(document).ready(function(){
 	
         $("#register-form").submit(function(e){
-			if(!alphabets($("#name").val()) || !numberCheck($("#mobile").val()) || !genderMust() ||  !passwordCheck($("#password").val()) || !cPasswordCheck() ){
-				e.preventDefault(e);
-			}
+			//if(!alphabets($("#name").val()) || !numberCheck($("#mobile").val()) || !genderMust() ||  !passwordCheck($("#password").val()) || !cPasswordCheck() ){
+			alert("Hello");
+				//e.preventDefault(e);
+		//	}
         });
         $("#login-form").submit(function(e){
 			if(!passwordCheck($("#password").val())){
@@ -19,7 +20,7 @@ $(document).ready(function(){
 			}
 			else{
 				$("#drop-error").text("");
-			}
+			}	
 			
 		});  
 		$('#hobby').focus(function(){
@@ -78,14 +79,14 @@ $(document).ready(function(){
 		});
 		
 		/* Below function for email validation*/
-		$('#email').blur(function(){
+//		$('#email').blur(function(){
 			/*if(!emailCheck($("#email").val())){
 				$("#email-error").text("Please enter valid email");
 			}	
 			else{
 				$("#email-error").text("");
 			}*/
-			var cuEmail=$(this).val();
+	/*		var cuEmail=$(this).val();
 				
 				$.ajax({
 				url: "DelUser",
@@ -104,7 +105,7 @@ $(document).ready(function(){
 		});
 		
 		
-		/* Below function for add address field in dom */
+		// Below function for add address field in dom 
 		var x = 1; 
 		$('.list_add_button').click(function() {
 			    if(x++ < 5){ 
@@ -120,13 +121,13 @@ $(document).ready(function(){
 
 	     });
 	    
-		/* Below function for remove address field from dom and one address can not delelte */
+		// Below function for remove address field from dom and one address can not delelte 
 	     $('.addresses').on('click', '.list_remove_button', function() {
 			if(x > 1){
 				$(this).parent().parent().parent().remove(); //Remove field html
 		           x--;
 			}
-	     });
+	     });*/
             
 });
 
@@ -142,16 +143,19 @@ $(document).ready(function(){
 
 	     function dropCheck(dropval){
 			if(dropval != "not"){
+				$("#drop-error").text("Please select value");
 				return false;	
+				
 			}
 			else{
+				$("#drop-error").text("");
 				return true;
 			}
 		}
 	     
 		function birthDateCheck(){
 			var dt = new Date( $("#birthdate").val());
-			if(new Date().getFullYear() < dt.getFullYear() && dt.getMonth() <= 12 && dt.getDate() <= 31){
+			if(dt == null &&  new Date().getFullYear() < dt.getFullYear() && dt.getMonth() <= 12 && dt.getDate() <= 31){
 				$("#birthdate-error").text("Please enter valid number");
 				return false;	
 			}

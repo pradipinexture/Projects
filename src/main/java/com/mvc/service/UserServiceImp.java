@@ -56,6 +56,11 @@ public class UserServiceImp implements UserServiceInterface {
 		// TODO Auto-generated method stub
 		return userDao.getAllUserAddresses(id);
 	}
+	@Override
+	public boolean updateUserData(UserModel userObj, List<AddressModel> insertData, List<AddressModel> updateData) {
+		// TODO Auto-generated method stub
+		return userDao.updateUserData(userObj,insertData,updateData);
+	}
 	
 
 }

@@ -130,7 +130,7 @@ label {
 			</c:otherwise>
 		</c:choose>
 							<div class="form-button">
-								<a id="data" href='EditProfile?email=<c:out value="${user.email}"/>&id=<c:out value="${h.id}"/> '  class="btn btn-success">Edit</a>
+								<a id="data" href="EditProfile?editEmail=<c:out value="${user.email}"/>&editId=<c:out value="${user.id}"/>"  class="btn btn-success">Edit</a>
 							</div>					
 					</section>
 				</div>

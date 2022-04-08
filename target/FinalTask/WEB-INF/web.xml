@@ -91,6 +91,12 @@
   	<description></description>
   	<servlet-class>com.mvc.controller.EditProfile</servlet-class>
   </servlet>
+  
+  <servlet>
+  	<servlet-name>UpdateProfile</servlet-name>
+  	<display-name>UpdateProfile</display-name>
+  	<servlet-class>com.mvc.controller.UpdateProfile</servlet-class>
+  </servlet>
 
   <servlet-mapping>
   	<servlet-name>Register</servlet-name>
@@ -144,6 +150,10 @@
   <servlet-mapping>
   	<servlet-name>EditProfile</servlet-name>
   	<url-pattern>/EditProfile</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>UpdateProfile</servlet-name>
+  	<url-pattern>/UpdateProfile</url-pattern>
   </servlet-mapping>
  
 </web-app>

@@ -14,6 +14,7 @@ public class UserModel {
 	private String cpassword;
 	private String decryPass;
 	private InputStream image;
+	private String imageString;
 	private int roletype;
 	
 	public int getRoletype() {
@@ -87,5 +88,11 @@ public class UserModel {
 	}
 	public void setImage(InputStream image) {
 		this.image = image;
+	}
+	public String getImageString() {
+		return imageString;
+	}
+	public void setImageString(String imageString) {
+		this.imageString = imageString;
 	}
 }

@@ -3,12 +3,14 @@ import org.apache.log4j.Logger;
 import com.mvc.model.AddressModel;
 import com.mvc.model.UserModel;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -25,6 +27,7 @@ public class UserDao implements UserDaoInterface{
 	 * get user id that currently added
 	 * then add role into role table using userid
 	 * at last add all addresses into address table by userid*/
+
 	public  boolean insertData(UserModel userObj,List<AddressModel> addobj) {
 		try {
 			String sql="INSERT INTO USER(NAME, MOBILE,EMAIL,HOBBY,GENDER,BIRTHDATE,PASSWORD,IMAGE) VALUES(?,?,?,?,?,?,?,?);";
@@ -45,16 +48,7 @@ public class UserDao implements UserDaoInterface{
 				PreparedStatement stateObject3 = conObject.prepareStatement("insert into role(userid,roletype) values(?,0);");
 				stateObject3.setInt(1,rs.getInt(1));
 				stateObject3.executeUpdate();
-
-				for(int i=0;i<addobj.size();i++){		
-					stateObject = conObject.prepareStatement("insert into address(userid,address,city,state,pincode) values(?,?,?,?,?);");
-					stateObject.setInt(1,rs.getInt(1));
-					stateObject.setString(2, addobj.get(i).getAddress());
-					stateObject.setString(3, addobj.get(i).getCity());
-					stateObject.setString(4, addobj.get(i).getState());
-					stateObject.setString(5, addobj.get(i).getPincode());
-					stateObject.execute();
-				}
+				addressInsert(addobj,rs.getInt(1));
 				return true;
 			}
 			else {
@@ -67,7 +61,27 @@ public class UserDao implements UserDaoInterface{
 		}
 
 	}
-	
+	/*Insert user addresses*/
+	public  boolean addressInsert(List<AddressModel> addobj,int userid) {
+		try {
+
+				for(int i=0;i<addobj.size();i++){		
+					PreparedStatement stateObject = conObject.prepareStatement("insert into address(userid,address,city,state,pincode) values(?,?,?,?,?);");
+					stateObject.setInt(1,userid);
+					stateObject.setString(2, addobj.get(i).getAddress());
+					stateObject.setString(3, addobj.get(i).getCity());
+					stateObject.setString(4, addobj.get(i).getState());
+					stateObject.setString(5, addobj.get(i).getPincode());
+					stateObject.execute();
+				}
+				return true;
+		}
+		catch(Exception e) {
+			logger.error("There is error : "+e);
+			return false;
+		}
+
+	}
 	/*Bleow function check user's email id exist or not*/
 	public  boolean checkUserAvailability(String email) {
 		try {
@@ -129,7 +143,7 @@ public class UserDao implements UserDaoInterface{
 		ResultSet rs=null;
 		try {
 
-			PreparedStatement stateObject = conObject.prepareStatement("select u.id,u.name,u.mobile,u.email,u.hobby,u.gender,u.birthdate,u.password,r.roletype from user u,role r where u.id=r.userid and u.email=?;");
+			PreparedStatement stateObject = conObject.prepareStatement("select u.id,u.name,u.mobile,u.email,u.hobby,u.gender,u.birthdate,u.password,u.image ,r.roletype from user u,role r where u.id=r.userid and u.email=?;");
 			stateObject.setString(1, userEmail);
 			rs=stateObject.executeQuery();
 			while(rs.next()) {	
@@ -141,8 +155,9 @@ public class UserDao implements UserDaoInterface{
 				user.setGender(rs.getString(6));
 				user.setBirthdate(rs.getString(7));
 				user.setDecryPass(rs.getString(8));
-				user.setPassword(EncryDecryAES.decrypt(rs.getString(8)));			
-				user.setRoletype(rs.getInt(9));
+				user.setPassword(EncryDecryAES.decrypt(rs.getString(8)));	
+				user.setImageString((Base64.getEncoder().encodeToString(rs.getBytes(9))));
+				user.setRoletype(rs.getInt(10));
 			}
 		}
 		catch(Exception e) {
@@ -222,18 +237,77 @@ public class UserDao implements UserDaoInterface{
 			return false;
 		}
 	}
-	public byte[] getImage(String email) {
-		byte[] imageByte=null;
+	@Override
+	public boolean updateUserData(UserModel userObj, List<AddressModel> insertData, List<AddressModel> updateData) {
 		try {
-			PreparedStatement stateObject1 = conObject.prepareStatement("select image from user where email=?");
-			stateObject1.setString(1, email);
-			ResultSet rs=stateObject1.executeQuery();
-			if(rs.next()) {
-				imageByte=rs.getBytes(1);
+			PreparedStatement stateObject = conObject.prepareStatement("update user set name=?,mobile=? ,email=?, hobby=?, gender=?,birthdate=?, password=?,image=?  where id=?;");
+			
+			stateObject.setString(1, userObj.getName());
+			stateObject.setString(2, userObj.getMobile());
+			stateObject.setString(3, userObj.getEmail());
+			stateObject.setString(4, userObj.getHobby());
+			stateObject.setString(5, userObj.getGender());
+			stateObject.setString(6, userObj.getBirthdate());
+			stateObject.setString(7, userObj.getDecryPass());
+			stateObject.setBlob(8, userObj.getImage());
+			stateObject.setInt(9, userObj.getId());
+			
+			if(stateObject.execute() != true) {
+				addressDelete(updateData,userObj.getId());
+				addressInsert(insertData,userObj.getId());
+				for(int i=0;i<updateData.size();i++){		
+					stateObject = conObject.prepareStatement("UPDATE address SET address =? ,city=? ,state=? ,pincode =? WHERE id = ?;");
+					stateObject.setString(1, updateData.get(i).getAddress());
+					stateObject.setString(2, updateData.get(i).getCity());
+					stateObject.setString(3, updateData.get(i).getState());
+					stateObject.setString(4, updateData.get(i).getPincode());
+					stateObject.setInt(5,updateData.get(i).getId());
+					stateObject.execute();
+				}
+				
+				return true;
+			}
+			else {
+				return true;
 			}
 		}
-		catch(Exception e) {}
-		return imageByte;
+		catch(Exception e) {
+			System.out.println("There is error : "+e);
+			return false;
+		}
 	}
+	private boolean addressDelete(List<AddressModel> updateData, int id) {
+		try {
+			StringBuilder sb= new StringBuilder();
+			for(int i=0;i<updateData.size();i++){  
+				if(i == updateData.size()-1) {
+					sb.append( " "+updateData.get(i).getId());
+				}
+				else {
+					sb.append( " "+updateData.get(i).getId()+"," );
+				}
+			}
+			
+			PreparedStatement stateObject1 = conObject.prepareStatement("delete from address where id not in ("+sb+") and userid="+id+";");
+			
+			if(stateObject1.executeUpdate() != 0) {
+				System.out.println("User deleted");
+				return true;
+				
+			}
+			else {
+				System.out.println("User not deleted");
+				return false;
+			}
+		}
+		catch(Exception e) {
+			logger.error("There is error : "+e);
+			return false;
+		}
+		
+		
+	}
+
+	
 
 }

@@ -34,16 +34,21 @@ public class Profile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		UserServiceInterface service=new UserServiceImp();
-		HttpSession session=request.getSession(false); 
-		UserModel userObj=(UserModel)session.getAttribute("user");
-		request.setAttribute("user", userObj); // first pass user object with request
-		
-		List<AddressModel> addModelObj= service.getAllUserAddresses(userObj.getId());
-		request.setAttribute("addresses", addModelObj); // pass perticular  user's  addresses with request
-		
-		request.getRequestDispatcher("/profile.jsp").forward(request, response);
-
+		try {
+			UserServiceInterface service=new UserServiceImp();
+			HttpSession session=request.getSession(false); 
+			UserModel userObj=(UserModel)session.getAttribute("user");
+			request.setAttribute("user", userObj); // first pass user object with request
+			
+			List<AddressModel> addModelObj= service.getAllUserAddresses(userObj.getId());
+			request.setAttribute("addresses", addModelObj); // pass perticular  user's  addresses with request
+			
+			request.getRequestDispatcher("/profile.jsp").forward(request, response);
+		}
+		catch(Exception e) {
+			System.out.print("Error is : "+e);
+			response.sendRedirect("index.jsp");
+		}
 	}
 
 	/**

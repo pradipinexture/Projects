@@ -31,12 +31,18 @@ public class AdminHome extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		try {
+			UserServiceInterface service=new UserServiceImp();
+			List<UserModel> users = service.getAllUsers();
+			
+			request.setAttribute("users", users);
+			request.getRequestDispatcher("/adminhome.jsp").forward(request, response);
+		}
+		catch(Exception e) {
+			System.out.print("Error is : "+e);
+			response.sendRedirect("index.jsp");
+		}
 		
-		UserServiceInterface service=new UserServiceImp();
-		List<UserModel> users = service.getAllUsers();
-		
-		request.setAttribute("users", users);
-		request.getRequestDispatcher("/adminhome.jsp").forward(request, response);
 	}
 
 	/**

@@ -70,8 +70,7 @@ label {
 							<h4>Personal Information :</h4>
 							<div class="fields">
 									<!-- assets/images/Image.png -->
-									<img id="profile-img" alt="Profile Image" src="Test">
-								
+									<img id="profile-img" alt="Profile Image" src="data:image/jpg;base64,<c:out value="${user.imageString}" />">
 							</div>
 							<div class="fields">
 								<label>Name : </label>

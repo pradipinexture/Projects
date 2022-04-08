@@ -1,4 +1,4 @@
-package com.mvc.controller;
+	package com.mvc.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,34 +43,62 @@ public class UserFilter  implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-//		chain.doFilter(request, response);
+		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+//		
 		String path=httpRequest.getServletPath();
-		((HttpServletResponse) response).setHeader("Cache-Control","no-cache, no-store, must-revalidate"); 
+		httpResponse.setHeader("Cache-Control","no-cache, no-store, must-revalidate"); 
 		HttpSession session=httpRequest.getSession(false);
 		UserModel userObjec=null;
-		boolean isOtherPage=path.startsWith("/Register") || path.startsWith("/index") || path.startsWith("/Login") || path.startsWith("/forgot");
+		boolean isOtherPage=path.equals("/") || path.startsWith("/index") || path.startsWith("/Login") || path.startsWith("/forgot");
 		if(session != null) {
 			userObjec=(UserModel) (session.getAttribute("user"));
 		}
-		
+		System.out.println(path);
 		if(userObjec  !=null) {
-        	 
-        	 if(path.startsWith("/index") || path.startsWith("/Login") || path.startsWith("/forgot")) {
-        		 ((HttpServletResponse) response).sendRedirect("Profile");
+        	 if(userObjec.getRoletype() != 1) {
+        		 
+        		 if(isOtherPage || path.startsWith("/AdminHome") || path.endsWith("Register.jsp") || path.startsWith("/adminhome") ) {
+        			 httpResponse.sendRedirect("Profile");
+        		 }
+        		 else {
+        			 chain.doFilter(request, response);
+        		 }        		 
             }
          	else {
-         		chain.doFilter(request, response);
+	       		 if(isOtherPage ) {
+	       			httpResponse.sendRedirect("AdminHome");
+	    		 }
+	    		 else {
+	    			 chain.doFilter(request, response);
+	    		 }
          	}
         }
-        else{
-        	if(isOtherPage) {
+		else {
+			if(isOtherPage || path.startsWith("/Register") || path.startsWith("/DelUser") ) {
         		chain.doFilter(request, response);
+			//	httpResponse.sendRedirect("index.jsp");
            }
+			else if(path.endsWith(".css") || path.endsWith(".js")|| path.endsWith(".map")) {
+				chain.doFilter(request, response);
+			}
         	else {
-        		((HttpServletResponse) response).sendRedirect("index.jsp");
+        		// httpRequest.getHeader("Referer") // for get previous pagex
+        		
+        		httpResponse.sendRedirect("index.jsp");
         	}
-        }		
+		}
+//        else{
+//        	if(isOtherPage || path.startsWith("/Register") ) {
+//        		chain.doFilter(request, response);
+//           }
+//        	else {
+//        		// httpRequest.getHeader("Referer") // for get previous pagex
+//        		httpResponse.sendRedirect("index.jsp");
+//        	}
+//        }	
+//		
 	}
 
 	/**

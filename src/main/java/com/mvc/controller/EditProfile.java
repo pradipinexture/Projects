@@ -32,22 +32,28 @@ public class EditProfile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if(request.getParameter("editEmail") != null) {
-			UserServiceInterface service=new UserServiceImp();
-			HttpSession session=request.getSession(false); 
-			UserModel userObj=(UserModel)session.getAttribute("user");
-			
-			UserModel u = service.getUserDetail(request.getParameter("editEmail"));
-			request.setAttribute("sUser", u); // first pass user object with request
-			
-			List<AddressModel> addModelObj= service.getAllUserAddresses(Integer.parseInt(request.getParameter("editId")));
-			request.setAttribute("addresses", addModelObj); // pass perticular  user's  addresses with request
-			
-			request.getRequestDispatcher("/Register.jsp").forward(request, response);
+		try {
+			if(request.getParameter("editEmail") != null) {
+				UserServiceInterface service=new UserServiceImp();
+				HttpSession session=request.getSession(false); 
+				UserModel userObj=(UserModel)session.getAttribute("user");
+				
+				UserModel u = service.getUserDetail(request.getParameter("editEmail"));
+				request.setAttribute("sUser", u); // first pass user object with request
+				List<AddressModel> addModelObj= service.getAllUserAddresses(Integer.parseInt(request.getParameter("editId")));
+				request.setAttribute("addresses", addModelObj); // pass perticular  user's  addresses with request
+				
+				request.getRequestDispatcher("/Register.jsp").forward(request, response);
+			}
+			else {
+				response.sendRedirect("Profile");
+			}
 		}
-		else {
-			response.sendRedirect("Profile");
+		catch(Exception e) {
+			System.out.print("Error is : "+e);
+			response.sendRedirect("index.jsp");
 		}
+
 		
 
 	}
